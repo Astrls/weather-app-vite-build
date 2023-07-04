@@ -1,3 +1,5 @@
+//API Functions
+
 const storeApiKey = (userApiKey) => {
     sessionStorage.setItem("user-api-key", userApiKey);
   };
