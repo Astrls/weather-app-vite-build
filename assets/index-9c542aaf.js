@@ -1,0 +1,24 @@
+(function(){const o=document.createElement("link").relList;if(o&&o.supports&&o.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))s(e);new MutationObserver(e=>{for(const t of e)if(t.type==="childList")for(const r of t.addedNodes)r.tagName==="LINK"&&r.rel==="modulepreload"&&s(r)}).observe(document,{childList:!0,subtree:!0});function n(e){const t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?t.credentials="include":e.crossOrigin==="anonymous"?t.credentials="omit":t.credentials="same-origin",t}function s(e){if(e.ep)return;e.ep=!0;const t=n(e);fetch(e.href,t)}})();const S=i=>{sessionStorage.setItem("user-api-key",i)},E=()=>{document.querySelector(".settings-title").classList.toggle("hidden"),document.querySelector(".settings-desc").classList.toggle("hidden"),document.querySelector(".api-input-wrapper").before(document.createElement("p").innerText="Enter a new API key to change it")},p={storeApiKey:S,changeApiMenu:E};let a="";const $=document.getElementById("submit"),y=document.getElementById("city-choice");document.createElement("div");const u=document.querySelector(".forecast-wrapper"),m=document.querySelector(".today-wrapper");document.querySelector(".days-button-wrapper");const h=()=>{document.getElementById("api-arrow").classList.contains("hidden")||document.getElementById("api-arrow").classList.add("hidden")};"user-api-key"in sessionStorage&&(h(),p.changeApiMenu());const g=i=>{"user-api-key"in sessionStorage?(a=sessionStorage.getItem("user-api-key"),h(),fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${i}&limit=1&appid=${a}`).then(o=>o.json()).then(o=>{let n=o[0].lat,s=o[0].lon,e=o[0].country,t=o[0].name;q(n,s,e,t),I(n,s)})):(document.querySelector(".forecast-wrapper").classList.toggle("hidden"),document.querySelector(".location").innerText="You need to add your OpenWeather API key!")},q=(i,o,n,s)=>{fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${i}&lon=${o}&units=metric&appid=${a}`).then(e=>e.json()).then(e=>{for(let t=0;t<e.list.length;t=t+8){let r=e.list[t].weather[0].main,d=e.list[t].weather[0].description,c=e.list[t].main.temp,v=e.list[t].weather[0].icon,l=e.list[t].dt_txt,w=l.slice(8,10)+l.slice(4,7),L=l.slice(-8,-3);document.querySelector(".forecast-wrapper").childNodes&&f(".forecast-wrapper"),setTimeout(()=>{W(r,d,c,v,w,L,n,s)},100)}})},I=(i,o)=>{fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${i}&lon=${o}&units=metric&appid=${a}`).then(n=>n.json()).then(n=>{let s=n.main.temp_min,e=n.main.temp_max,t=n.main.humidity,r=n.wind.speed,d=n.weather[0].description,c=n.weather[0].icon;console.log(c),document.querySelector(".today-wrapper").childNodes&&f(".today-wrapper"),setTimeout(()=>{x(c,s,e,t,r,d)},100)})};$.addEventListener("click",()=>{let i=document.getElementById("city-choice").value;u.classList.remove("hidden"),m.classList.remove("hidden"),g(i),y.value=""});document.addEventListener("keyup",i=>{if(i.code=="Enter"){let o=document.getElementById("city-choice").value;u.classList.remove("hidden"),m.classList.remove("hidden"),g(o),y.value=""}});const W=(i,o,n,s,e,t,r,d)=>{let c=document.createElement("div");c.classList.add("weather-card"),c.innerHTML=`
+    <div class="date-time">
+      <span class="time">${t}</span><span class="date">${e}</span>
+    </div>
+    <div class="forecast">
+      <img src="https://openweathermap.org/img/wn/${s}@2x.png" alt="${i}">${o}
+    </div>
+  <div class="temp">${n.toFixed(0)}°C</div>`,u.append(c),document.querySelector(".location").innerText=`${d}, ${r}`},x=(i,o,n,s,e,t)=>{let r=document.createElement("div");r.classList.add("today-card"),r.innerHTML=`
+  <h1 class="today-desc">
+  <img
+    src="https://openweathermap.org/img/wn/${i}@2x.png"
+    alt=""
+  />${t}
+      </h1>
+<div class="today-data">
+  <div class="today-data-col1">
+    <h2 class="today-temp">MIN: ${o.toFixed(0)}°C</h2>
+    <p class="today-wind">Wind: ${e} km/h</p>
+  </div>
+  <div class="today-data-col2">
+    <h2 class="today-temp">MAX: ${n.toFixed(0)}°C</h2>
+    <p class="today-humidity">Humidity: ${s}%</p>
+  </div>
+</div>`,m.append(r)};let f=i=>{document.querySelector(i).childNodes.forEach(o=>{o.remove()})};document.querySelector(".settings-icon").addEventListener("click",()=>{document.querySelector(".settings-menu").classList.toggle("hidden")});document.querySelector(".settings").addEventListener("click",()=>{document.querySelector(".settings-menu").classList.toggle("hidden")});document.getElementById("save-api").addEventListener("click",()=>{let i=document.getElementById("api-key");a=i.value,i.value="Thank you",setTimeout(()=>{i.value="",p.changeApiMenu(),document.querySelector(".settings-menu").classList.toggle("hidden")},1500),p.storeApiKey(a),document.getElementById("api-arrow").classList.toggle("hidden")});
